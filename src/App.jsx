@@ -3,6 +3,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme/theme';
 import Layout from './components/Layout';
+import { ProgressProvider } from './hooks/useProgress';
 import Dashboard from './pages/Dashboard';
 import DomainPage from './pages/DomainPage';
 import ScenarioPage from './pages/ScenarioPage';
@@ -19,6 +20,7 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <ProgressProvider>
       <BrowserRouter basename="/CCA-F-learn">
         <Layout>
           <Routes>
@@ -36,6 +38,7 @@ export default function App() {
           </Routes>
         </Layout>
       </BrowserRouter>
+      </ProgressProvider>
     </ThemeProvider>
   );
 }
