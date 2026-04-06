@@ -13,12 +13,40 @@ import IconButton from '@mui/material/IconButton';
 
 import Button from '@mui/material/Button';
 
-import { studyPlan, domains, scenarios, getDomain, resources, keyDocsPerPhase } from '../data/examData';
+import { studyPlan, domains, scenarios, getDomain, getScenario, resources, keyDocsPerPhase } from '../data/examData';
 import MuiLink from '@mui/material/Link';
 import { PageHero, Section, SectionHeading, ProgressBar } from '../components';
 import { useProgress } from '../hooks/useProgress';
 
 // ─── helpers ────────────────────────────────────────────────────────────────
+
+/** Check if a study-plan item's linked page (scenario or domain) is fully completed */
+function isLinkedContentDone(item, getStatus) {
+  if (!item.link) return false;
+  // Scenario link: /scenarios/s1
+  const scenarioMatch = item.link.match(/^\/scenarios\/(s\d+)$/);
+  if (scenarioMatch) {
+    const scenario = getScenario(scenarioMatch[1]);
+    if (scenario && scenario.checklist && scenario.checklist.length > 0) {
+      return scenario.checklist.every((_, i) =>
+        getStatus(`scenario:${scenario.id}:${i}`, false)
+      );
+    }
+    return false;
+  }
+  // Domain link: /domains/d1
+  const domainMatch = item.link.match(/^\/domains\/(d\d+)$/);
+  if (domainMatch) {
+    const domain = domains.find((d) => d.id === domainMatch[1]);
+    if (domain && domain.taskStatements.length > 0) {
+      return domain.taskStatements.every((ts) =>
+        getStatus(`task:${domain.id}:${ts.id}`, false)
+      );
+    }
+    return false;
+  }
+  return false;
+}
 
 function domainCompletion(domain, getStatus) {
   const total = domain.taskStatements.length;
@@ -29,14 +57,24 @@ function domainCompletion(domain, getStatus) {
   return { pct: Math.round((reviewed / total) * 100), total, reviewed };
 }
 
-function computePhaseStatus(phase, getStatus) {
-  const allItems = phase.steps.flatMap((step, si) =>
-    step.items.map((_, i) => `plan:${phase.id}:${si}:${i}`)
+function computePhaseCompletion(phase, getStatus) {
+  const allItemsDone = phase.steps.flatMap((step, si) =>
+    step.items.map((item, i) => {
+      const key = `plan:${phase.id}:${si}:${i}`;
+      return getStatus(key, false) || isLinkedContentDone(item, getStatus);
+    })
   );
-  const doneCount = allItems.filter((key) => getStatus(key, false)).length;
-  if (doneCount === allItems.length) return 'completed';
-  if (doneCount > 0) return 'in_progress';
-  return 'pending';
+  const total = allItemsDone.length;
+  const doneCount = allItemsDone.filter(Boolean).length;
+  const pct = total > 0 ? Math.round((doneCount / total) * 100) : 0;
+  let status = 'pending';
+  if (doneCount === total) status = 'completed';
+  else if (doneCount > 0) status = 'in_progress';
+  return { status, pct, doneCount, total };
+}
+
+function computePhaseStatus(phase, getStatus) {
+  return computePhaseCompletion(phase, getStatus).status;
 }
 
 function phaseSegmentBg(phase) {
@@ -49,15 +87,25 @@ function phaseSegmentBg(phase) {
 
 function PhaseProgressBar({ getStatus }) {
   const phases = studyPlan.phases;
+  const phaseData = phases.map((phase) => computePhaseCompletion(phase, getStatus));
+  const totalItems = phaseData.reduce((sum, p) => sum + p.total, 0);
+  const totalDone = phaseData.reduce((sum, p) => sum + p.doneCount, 0);
+  const overallPct = totalItems > 0 ? Math.round((totalDone / totalItems) * 100) : 0;
+
   return (
     <Box sx={{ bgcolor: 'primary.dark', color: '#fff', py: { xs: 4, md: 5 }, px: { xs: 2, md: 3 } }}>
       <Box sx={{ maxWidth: 'lg', mx: 'auto' }}>
-        <Typography variant="overline" sx={{ color: 'rgba(255,255,255,0.6)', letterSpacing: '0.1em', mb: 2, display: 'block' }}>
-          Study Plan Progress
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', mb: 2 }}>
+          <Typography variant="overline" sx={{ color: 'rgba(255,255,255,0.6)', letterSpacing: '0.1em' }}>
+            Study Plan Progress
+          </Typography>
+          <Typography variant="caption" sx={{ color: '#36C0CF', fontWeight: 700, fontSize: '0.85rem' }}>
+            {overallPct}% ({totalDone}/{totalItems})
+          </Typography>
+        </Box>
         <Box sx={{ display: 'flex', gap: 0.5, mb: 1.5 }}>
-          {phases.map((phase) => {
-            const status = computePhaseStatus(phase, getStatus);
+          {phases.map((phase, idx) => {
+            const { status, pct } = phaseData[idx];
             return (
               <Box
                 key={phase.id}
@@ -65,15 +113,26 @@ function PhaseProgressBar({ getStatus }) {
                   flex: 1,
                   height: 12,
                   borderRadius: 1,
-                  background: phaseSegmentBg({ status }),
+                  bgcolor: 'rgba(255,255,255,0.15)',
+                  overflow: 'hidden',
                 }}
-              />
+              >
+                <Box
+                  sx={{
+                    width: `${pct}%`,
+                    height: '100%',
+                    borderRadius: 1,
+                    background: status === 'completed' ? '#4caf50' : '#36C0CF',
+                    transition: 'width 0.3s ease',
+                  }}
+                />
+              </Box>
             );
           })}
         </Box>
         <Box sx={{ display: 'flex', gap: 0.5 }}>
-          {phases.map((phase) => {
-            const status = computePhaseStatus(phase, getStatus);
+          {phases.map((phase, idx) => {
+            const { status, pct, doneCount, total } = phaseData[idx];
             return (
               <Box key={phase.id} sx={{ flex: 1, minWidth: 0 }}>
                 <Typography
@@ -85,7 +144,7 @@ function PhaseProgressBar({ getStatus }) {
                       : status === 'in_progress'
                       ? '#36C0CF'
                       : 'rgba(255,255,255,0.45)',
-                    fontWeight: status === 'in_progress' ? 700 : 400,
+                    fontWeight: status !== 'pending' ? 700 : 400,
                     fontSize: '0.68rem',
                     lineHeight: 1.3,
                     whiteSpace: 'nowrap',
@@ -101,10 +160,9 @@ function PhaseProgressBar({ getStatus }) {
                     display: 'block',
                     color: 'rgba(255,255,255,0.35)',
                     fontSize: '0.6rem',
-                    textTransform: 'capitalize',
                   }}
                 >
-                  {status.replace('_', ' ')}
+                  {doneCount}/{total} ({pct}%)
                 </Typography>
               </Box>
             );
@@ -186,7 +244,7 @@ function PhasePanel({ phase, defaultOpen, getStatus, toggleChecked }) {
               <Box component="ul" sx={{ m: 0, p: 0, listStyle: 'none' }}>
                 {step.items.map((item, i) => {
                   const key = `plan:${phase.id}:${si}:${i}`;
-                  const done = getStatus(key, false);
+                  const done = getStatus(key, false) || isLinkedContentDone(item, getStatus);
                   return (
                   <Box
                     key={i}
