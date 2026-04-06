@@ -2140,7 +2140,7 @@ Subagents run in isolated contexts. The exam tests naming conventions, tool rest
 **Critical naming rule:** Agents require full prefixed names.
 
 \`\`\`
-✅ dx-dev-experience:dx-code-reviewer     (works)
+✅ dx-core:dx-code-reviewer     (works)
 ❌ dx-code-reviewer                        (fails silently — "Agent type not found")
 \`\`\`
 

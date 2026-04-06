@@ -31,13 +31,13 @@
 - Coordinator-subagent pattern: dx-req-all, dx-step-all, dx-bug-all, dx-figma-all coordinator skills managing delegation, error handling, result aggregation
 - Model tiering: Opus (code reviewer) for deep reasoning, Sonnet (PR reviewer, step executor) for analysis, Haiku (file resolver, doc searcher) for lookups
 - Workflow enforcement via hooks: SessionStart (initialize), PreToolUse (git branch protection, feature/* naming), PostToolUse (plugin.json validation), Stop (anti-rationalization guard)
-- Subagent spawning with full prefixed names (no auto-inherit): `dx-dev-experience:dx-code-reviewer`
+- Subagent spawning with full prefixed names (no auto-inherit): `dx-core:dx-code-reviewer`
 - Tool distribution: executor agent restricted to Read/Write/Edit/Bash/Glob/Grep (NO MCP, NO Task)
 
 **D2 - Tool Design & MCP:**
 - Multi-level MCP scoping: project .mcp.json (context7, ado) + plugin dx-dev .mcp.json (axe-mcp-server, figma) + plugin dx-aem .mcp.json (AEM, chrome-devtools)
 - `${AEM_INSTANCES}` env var expansion with secrets in settings.local.json (gitignored)
-- Full tool prefix naming: `mcp__plugin_dx-dev-experience_figma__get_screenshot`
+- Full tool prefix naming: `mcp__plugin_dx-core_figma__get_screenshot`
 
 **D3 - Claude Code Config:**
 - Root CLAUDE.md (8720 bytes) with project commands, build pipeline, conventions, DX workflow, ADO MCP usage
