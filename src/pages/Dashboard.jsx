@@ -13,12 +13,40 @@ import IconButton from '@mui/material/IconButton';
 
 import Button from '@mui/material/Button';
 
-import { studyPlan, domains, scenarios, getDomain, resources, keyDocsPerPhase } from '../data/examData';
+import { studyPlan, domains, scenarios, getDomain, getScenario, resources, keyDocsPerPhase } from '../data/examData';
 import MuiLink from '@mui/material/Link';
 import { PageHero, Section, SectionHeading, ProgressBar } from '../components';
 import { useProgress } from '../hooks/useProgress';
 
 // ─── helpers ────────────────────────────────────────────────────────────────
+
+/** Check if a study-plan item's linked page (scenario or domain) is fully completed */
+function isLinkedContentDone(item, getStatus) {
+  if (!item.link) return false;
+  // Scenario link: /scenarios/s1
+  const scenarioMatch = item.link.match(/^\/scenarios\/(s\d+)$/);
+  if (scenarioMatch) {
+    const scenario = getScenario(scenarioMatch[1]);
+    if (scenario && scenario.checklist && scenario.checklist.length > 0) {
+      return scenario.checklist.every((_, i) =>
+        getStatus(`scenario:${scenario.id}:${i}`, false)
+      );
+    }
+    return false;
+  }
+  // Domain link: /domains/d1
+  const domainMatch = item.link.match(/^\/domains\/(d\d+)$/);
+  if (domainMatch) {
+    const domain = domains.find((d) => d.id === domainMatch[1]);
+    if (domain && domain.taskStatements.length > 0) {
+      return domain.taskStatements.every((ts) =>
+        getStatus(`task:${domain.id}:${ts.id}`, false)
+      );
+    }
+    return false;
+  }
+  return false;
+}
 
 function domainCompletion(domain, getStatus) {
   const total = domain.taskStatements.length;
@@ -30,11 +58,14 @@ function domainCompletion(domain, getStatus) {
 }
 
 function computePhaseStatus(phase, getStatus) {
-  const allItems = phase.steps.flatMap((step, si) =>
-    step.items.map((_, i) => `plan:${phase.id}:${si}:${i}`)
+  const allItemsDone = phase.steps.flatMap((step, si) =>
+    step.items.map((item, i) => {
+      const key = `plan:${phase.id}:${si}:${i}`;
+      return getStatus(key, false) || isLinkedContentDone(item, getStatus);
+    })
   );
-  const doneCount = allItems.filter((key) => getStatus(key, false)).length;
-  if (doneCount === allItems.length) return 'completed';
+  const doneCount = allItemsDone.filter(Boolean).length;
+  if (doneCount === allItemsDone.length) return 'completed';
   if (doneCount > 0) return 'in_progress';
   return 'pending';
 }
@@ -186,7 +217,7 @@ function PhasePanel({ phase, defaultOpen, getStatus, toggleChecked }) {
               <Box component="ul" sx={{ m: 0, p: 0, listStyle: 'none' }}>
                 {step.items.map((item, i) => {
                   const key = `plan:${phase.id}:${si}:${i}`;
-                  const done = getStatus(key, false);
+                  const done = getStatus(key, false) || isLinkedContentDone(item, getStatus);
                   return (
                   <Box
                     key={i}
