@@ -11,12 +11,12 @@ const myProjects = [
     name: 'DX Plugin System',
     domains: ['d1', 'd2', 'd3'],
     repo: 'https://github.com/easingthemes/dx-aem-flow',
-    description: 'A three-plugin Claude Code architecture for enterprise Azure DevOps + AEM development workflows. 77+ skills, 13+ agents, hooks, rules.',
+    description: 'A four-plugin Claude Code architecture for enterprise Azure DevOps + AEM development workflows. 76 skills, 13 agents, 8 hooks, cross-platform support for 10 AI coding tools.',
     sections: [
       {
         examDomain: 'D1: Agentic Architecture',
         examConcept: 'Coordinator-Subagent Pattern (Task 1.2)',
-        implementation: 'Coordinator skills that orchestrate multiple sub-skills: dx-req-all (requirements), dx-step-all (execution), dx-bug-all (bug lifecycle), dx-figma-all (Figma workflow). Hub-and-spoke architecture where coordinator manages delegation, error handling, and result aggregation.',
+        implementation: 'Coordinator skills that orchestrate multiple sub-skills: dx-req-all (requirements), dx-step-all (execution), dx-bug-all (bug lifecycle), dx-figma-all (Figma workflow). Hub-and-spoke architecture where coordinator manages delegation, error handling, and result aggregation. Superpowers soft-dependency pattern enables optional skill chaining with graceful fallbacks across platforms.',
         links: [
           { label: 'dx-req-all', url: `${DX}/tree/main/plugins/dx-core/skills/dx-req-all` },
           { label: 'dx-step-all', url: `${DX}/tree/main/plugins/dx-core/skills/dx-step-all` },
@@ -41,16 +41,24 @@ const myProjects = [
       {
         examDomain: 'D1: Agentic Architecture',
         examConcept: 'Workflow Enforcement via Hooks (Task 1.4, 1.5)',
-        implementation: '4 hook types: SessionStart (initialize session state), PreToolUse (git branch protection — blocks commits on main/master, enforces feature/* naming), PostToolUse (plugin file validation prevents plugin.json corruption, subagent logging), Stop (anti-rationalization guard — blocks exit if secrets detected, plan steps abandoned, or source uncommitted).',
+        implementation: '8 hooks across 4 types: SessionStart (initialize session state), PreToolUse (git branch protection — blocks commits on main/master, enforces feature/* naming), PostToolUse (plugin file validation prevents plugin.json corruption, subagent logging), Stop (anti-rationalization guard — blocks exit if secrets detected, plan steps abandoned, or source uncommitted). Three hook profiles (minimal/standard/strict) controlled via environment variable.',
         links: [
           { label: 'dx-core hooks/', url: `${DX}/tree/main/plugins/dx-core/hooks` },
           { label: 'dx-aem hooks/', url: `${DX}/tree/main/plugins/dx-aem/hooks` },
         ],
       },
       {
+        examDomain: 'D1: Agentic Architecture',
+        examConcept: 'Multi-Repo Orchestration (Task 1.2)',
+        implementation: 'dx-hub plugin enables hub-and-spoke multi-repo workflows: dx-hub-init discovers sibling repos and merges configs, dx-hub-dispatch opens independent Claude sessions in each repo via VS Code terminals, dx-hub-status tracks progress across repos. Solves the enterprise problem of tickets spanning multiple repositories.',
+        links: [
+          { label: 'dx-hub plugin/', url: `${DX}/tree/main/plugins/dx-hub` },
+        ],
+      },
+      {
         examDomain: 'D2: Tool Design & MCP',
         examConcept: 'MCP Server Integration (Task 2.4)',
-        implementation: 'Multi-level MCP scoping: project .mcp.json (context7, ado) + plugin dx-dev .mcp.json (axe-mcp-server, figma) + plugin dx-aem .mcp.json (AEM, chrome-devtools). ${AEM_INSTANCES} env var expansion with secrets in settings.local.json (gitignored). Full tool prefix naming: mcp__plugin_dx-dev-experience_figma__get_screenshot.',
+        implementation: 'Multi-level MCP scoping: project .mcp.json (context7, ado) + plugin dx-dev .mcp.json (axe-mcp-server, figma) + plugin dx-aem .mcp.json (AEM, chrome-devtools). ${AEM_INSTANCES} env var expansion with secrets in settings.local.json (gitignored). Full tool prefix naming: mcp__plugin_dx-dev-experience_figma__get_screenshot. 6 MCP server integrations: ADO, Atlassian, Figma, axe (accessibility), AEM (HTTP), Chrome DevTools.',
         links: [
           { label: '.mcp.json', url: `${DX}/blob/main/.mcp.json` },
         ],
@@ -66,8 +74,17 @@ const myProjects = [
       },
       {
         examDomain: 'D3: Claude Code Config',
+        examConcept: 'Cross-Platform Agent Support (Task 3.1)',
+        implementation: 'Same 76 skills run identically across 10 AI coding platforms: Claude Code, GitHub Copilot CLI, VS Code Chat, Cursor, Windsurf, Amazon Q, Cline, Continue, Codex CLI, Gemini CLI. Cross-platform agent files: CLAUDE.md, AGENTS.md, GEMINI.md, .claude-plugin/, .cursor-plugin/. Demonstrates portable skill architecture not locked to a single vendor.',
+        links: [
+          { label: 'CLAUDE.md', url: `${DX}/blob/main/CLAUDE.md` },
+          { label: '.claude-plugin/', url: `${DX}/tree/main/.claude-plugin` },
+        ],
+      },
+      {
+        examDomain: 'D3: Claude Code Config',
         examConcept: 'CLAUDE.md Hierarchy (Task 3.1)',
-        implementation: 'Root CLAUDE.md (8720 bytes: project commands, build pipeline, conventions, DX workflow, ADO MCP usage) + Plugin CLAUDE.md (9000+ bytes: plugin architecture, testing, conventions) + Agent memory: .claude/agent-memory/*/MEMORY.md for per-agent learned context.',
+        implementation: 'Root CLAUDE.md (project commands, build pipeline, conventions, DX workflow, ADO MCP usage) + Plugin CLAUDE.md (plugin architecture, testing, conventions) + Agent memory: .claude/agent-memory/*/MEMORY.md for per-agent learned context.',
         links: [
           { label: 'CLAUDE.md', url: `${DX}/blob/main/CLAUDE.md` },
           { label: 'settings.json', url: `${DX}/blob/main/.claude/settings.json` },
@@ -85,7 +102,7 @@ const myProjects = [
       {
         examDomain: 'D3: Claude Code Config',
         examConcept: 'Custom Skills with Frontmatter (Task 3.2)',
-        implementation: '77+ skills with YAML frontmatter: context: fork for isolating verbose output, allowed-tools for restricting tool access, argument-hint for parameter prompting. Three-layer override system: .ai/rules/ project rules (highest priority) > config.yaml overrides > plugin defaults (lowest).',
+        implementation: '76 skills with YAML frontmatter: context: fork for isolating verbose output, allowed-tools for restricting tool access, argument-hint for parameter prompting. Three-layer override system: .ai/rules/ project rules (highest priority) > config.yaml overrides > plugin defaults (lowest). DOT digraph flow control: branching skills use directed graphs as single source of truth for decision logic.',
         links: [
           { label: 'dx-core skills/', url: `${DX}/tree/main/plugins/dx-core/skills` },
           { label: 'dx-aem skills/', url: `${DX}/tree/main/plugins/dx-aem/skills` },
@@ -94,15 +111,23 @@ const myProjects = [
       {
         examDomain: 'D3: Claude Code Config',
         examConcept: 'CI/CD Automation (Task 3.6)',
-        implementation: 'dx-automation plugin runs Claude Code agents as ADO pipelines triggered by AWS Lambda webhooks: Definition of Ready/Done checking, automated PR review, automated PR answering, automated fixes.',
+        implementation: 'dx-automation plugin (11 skills) runs Claude Code agents as ADO pipelines triggered by AWS Lambda webhooks: Definition of Ready/Done checking, automated PR review, automated PR answering, automated bug fixing, QA agent. Fully autonomous 24/7 operation without human intervention.',
         links: [
           { label: 'dx-automation skills/', url: `${DX}/tree/main/plugins/dx-automation/skills` },
         ],
       },
       {
+        examDomain: 'D5: Context Management',
+        examConcept: 'Persistent Context Across Sessions (Task 5.1)',
+        implementation: 'Spec directory convention: .ai/specs/<id>-<slug>/ with predictable filenames (raw-story.md, explain.md, research.md, implement.md). Skills discover each other\'s output by file naming convention — no explicit data passing. Config as context: single .ai/config.yaml provides project context to all skills. Shared rules in .ai/rules/ for cross-cutting concerns.',
+        links: [
+          { label: 'dx-core skills/', url: `${DX}/tree/main/plugins/dx-core/skills` },
+        ],
+      },
+      {
         examDomain: 'Architecture Patterns',
         examConcept: 'Key Architectural Decisions',
-        implementation: 'Config-driven design: .ai/config.yaml read at runtime, never hardcoded (avoids stale documentation). Spec convention: .ai/specs/<id>-<slug>/ with predictable filenames (structured data for context passing). Override layers: 3-layer priority — rules > config > defaults (CLAUDE.md hierarchy and scoping). Full prefix naming: dx-dev-experience:dx-code-reviewer (explicit subagent context, no auto-inherit). Plugin edit validation: PostToolUse hook prevents plugin.json corruption (hooks for deterministic compliance). Anti-rationalization: Stop hook blocks exit if plan steps abandoned (enforcement patterns vs prompt-based guidance). Audit logging: all AWS/Azure mutations through wrapper functions (observability).',
+        implementation: 'Config-driven design: .ai/config.yaml read at runtime, never hardcoded (avoids stale documentation). Spec convention: .ai/specs/<id>-<slug>/ with predictable filenames (structured data for context passing). Override layers: 3-layer priority — rules > config > defaults (CLAUDE.md hierarchy and scoping). Full prefix naming: dx-dev-experience:dx-code-reviewer (explicit subagent context, no auto-inherit). Plugin edit validation: PostToolUse hook prevents plugin.json corruption (hooks for deterministic compliance). Anti-rationalization: Stop hook blocks exit if plan steps abandoned (enforcement patterns vs prompt-based guidance). Four-plugin architecture: dx-core (49 skills, platform-agnostic), dx-aem (12 skills, AEM-specific), dx-automation (11 skills, CI/CD agents), dx-hub (4 skills, multi-repo orchestration).',
       },
     ],
   },
@@ -115,24 +140,32 @@ const myProjects = [
     name: 'AEM MCP Server',
     domains: ['d2', 'd5'],
     repo: 'https://github.com/easingthemes/aem-mcp-server',
-    description: 'A 46-tool MCP server for Adobe Experience Manager with dual transport (stdio/HTTP), multi-instance support, structured error handling, and OAuth + Basic auth.',
+    description: 'A 51-tool MCP server (v1.6.2) for Adobe Experience Manager with 4 MCP resources, dual transport (stdio/HTTP), multi-instance support, tool annotations, verbosity levels, and TypeScript + Zod schema-first design.',
     sections: [
       {
         examDomain: 'D2: Tool Design & MCP',
         examConcept: 'Tool Interface Design (Task 2.1)',
-        implementation: '46 tools across 8 categories: Content & Text (5), Sites & Localization (3), Pages (8), Components (8), Assets (3), Search (3), Templates (2), Workflows (9), Fragments (8). Descriptions include intelligent behavior explanation and common examples (e.g., startWorkflow lists common workflow names). Split into purpose-specific tools (updateComponent, scanPageComponents, createComponent, etc.) — NOT a single manageComponent tool.',
+        implementation: '51 tools across 10 categories: Content & Text (8: getPageContent, getPageTextContent, getAllTextContent, getPageImages, updateImagePath, getNodeContent, listChildren, getPageProperties), Sites & Localization (3), Pages (5: listPages, createPage, deletePage, activatePage, deactivatePage), Components (7: createComponent, addComponent, updateComponent, deleteComponent, scanPageComponents, bulkUpdateComponents, convertComponents, bulkConvertComponents), Assets (3: getAssetMetadata, updateAsset, deleteAsset), Search (3: searchContent, executeJCRQuery, enhancedPageSearch), Templates (2), Workflows (8: listWorkflowModels, startWorkflow, listWorkflowInstances, getWorkflowInstance, updateWorkflowInstanceState, getInboxItems, completeWorkItem, delegateWorkItem, getWorkItemRoutes), Content Fragments (4: getContentFragment, listContentFragments, manageContentFragment, manageContentFragmentVariation), Experience Fragments (4: getExperienceFragment, listExperienceFragments, manageExperienceFragment, manageExperienceFragmentVariation). Tool annotations include group, readOnly, and complexity metadata for intelligent agent tool selection.',
         links: [
-          { label: 'tools/', url: `${AEM}/tree/main/src/tools` },
-          { label: 'schemas/', url: `${AEM}/tree/main/src/schemas` },
+          { label: 'mcp.tools.ts', url: `${AEM}/blob/main/src/mcp/mcp.tools.ts` },
+          { label: 'mcp.aem-handler.ts', url: `${AEM}/blob/main/src/mcp/mcp.aem-handler.ts` },
+        ],
+      },
+      {
+        examDomain: 'D2: Tool Design & MCP',
+        examConcept: 'MCP Resources vs Tools (Task 2.1)',
+        implementation: '4 MCP resource types for upfront catalog discovery: AEM Components, AEM Sites, AEM Templates, AEM Workflow Models. URI scheme: aem://{instance}/{key}. Resources provide read-only catalog data without consuming tool-call tokens — the key MCP distinction between resources (discovery/context) and tools (actions). Enables agents to understand available AEM content before making tool calls.',
+        links: [
+          { label: 'mcp.resources.ts', url: `${AEM}/blob/main/src/mcp/mcp.resources.ts` },
         ],
       },
       {
         examDomain: 'D2: Tool Design & MCP',
         examConcept: 'Structured Error Responses (Task 2.2)',
-        implementation: 'Custom AEMOperationError class with 17 typed error codes categorized as: Transient/retryable (CONNECTION_FAILED, TIMEOUT, RATE_LIMITED, SYSTEM_ERROR), Validation/not retryable (INVALID_PATH, INVALID_COMPONENT_TYPE, INVALID_LOCALE, INVALID_PARAMETERS), Permission/not retryable (AUTHENTICATION_FAILED, UNAUTHORIZED, INSUFFICIENT_PERMISSIONS), Business/not retryable (RESOURCE_NOT_FOUND, COMPONENT_NOT_FOUND, PAGE_NOT_FOUND, UPDATE_FAILED, VALIDATION_FAILED, REPLICATION_FAILED, QUERY_FAILED). MCP responses use isError: true (never throw exceptions or return empty strings).',
+        implementation: 'Custom AEMOperationError class with 17 typed error codes categorized as: Transient/retryable (CONNECTION_FAILED, TIMEOUT, RATE_LIMITED, SYSTEM_ERROR), Validation/not retryable (INVALID_PATH, INVALID_COMPONENT_TYPE, INVALID_LOCALE, INVALID_PARAMETERS), Permission/not retryable (AUTHENTICATION_FAILED, UNAUTHORIZED, INSUFFICIENT_PERMISSIONS), Business/not retryable (RESOURCE_NOT_FOUND, COMPONENT_NOT_FOUND, PAGE_NOT_FOUND, UPDATE_FAILED, VALIDATION_FAILED, REPLICATION_FAILED, QUERY_FAILED). Error responses include suggestion and alternatives fields enabling self-healing agent workflows. MCP responses use isError: true (never throw exceptions or return empty strings).',
         code: '// HTTP status mapping:\n// 401 -> AUTHENTICATION_FAILED (not recoverable)\n// 403 -> INSUFFICIENT_PERMISSIONS (not recoverable)\n// 404 -> RESOURCE_NOT_FOUND (not recoverable)\n// 429 -> RATE_LIMITED (recoverable, retryAfter)\n// 500/502/503 -> SYSTEM_ERROR (recoverable, 30s retry)',
         links: [
-          { label: 'errors.js', url: `${AEM}/blob/main/src/errors.js` },
+          { label: 'aem.errors.ts', url: `${AEM}/blob/main/src/aem/aem.errors.ts` },
         ],
       },
       {
@@ -140,7 +173,7 @@ const myProjects = [
         examConcept: 'Automatic Retry with Exponential Backoff',
         implementation: 'safeExecute() function: for each attempt (up to maxRetries=3), try operation, on failure check error.recoverable — if not recoverable or max retries reached, throw; otherwise wait error.retryAfter or 2^attempt * 1000ms. Distinguishes retryable (transient) from non-retryable (validation/permission).',
         links: [
-          { label: 'connector.js', url: `${AEM}/blob/main/src/connector.js` },
+          { label: 'aem.connector.ts', url: `${AEM}/blob/main/src/aem/aem.connector.ts` },
         ],
       },
       {
@@ -148,33 +181,40 @@ const myProjects = [
         examConcept: 'MCP Transport Mechanisms (Task 2.4)',
         implementation: 'Dual transport: stdio (-t stdio, for IDE integration via npx — zero install) and HTTP (-t http, for persistent shared server, team environments). Stdio safety: logger writes to stderr only (never stdout) to prevent corrupting JSON-RPC stream.',
         links: [
-          { label: 'index.js (transport)', url: `${AEM}/blob/main/src/index.js` },
+          { label: 'mcp.stdio.ts', url: `${AEM}/blob/main/src/mcp/mcp.stdio.ts` },
+          { label: 'mcp.server-handler.ts', url: `${AEM}/blob/main/src/mcp/mcp.server-handler.ts` },
         ],
       },
       {
         examDomain: 'D2: Tool Design & MCP',
-        examConcept: 'Multi-Instance Support',
-        implementation: 'Automatic instance parameter injection into all tool schemas. Each instance gets independent handler. Default instance when parameter omitted. Config: --instances "author:http://localhost:4502:<user>:<pass>,publish:http://localhost:4503".',
+        examConcept: 'Multi-Instance & Dynamic Schemas',
+        implementation: 'Automatic instance parameter injection via injectInstanceParam() — dynamically adds an "instance" parameter to all tool schemas when multi-instance is active. Adaptive tool schemas that change shape based on configuration. Each instance gets independent handler. Default instance when parameter omitted.',
       },
       {
         examDomain: 'D2: Tool Design & MCP',
-        examConcept: 'Input Validation with Zod Schemas',
-        implementation: 'Zod schemas for all tool inputs, converted to JSON Schema for MCP with zodToJsonSchema(). Properties include .describe() for field documentation. Uses .passthrough() for extensibility.',
+        examConcept: 'Schema-First Tool Design (Task 2.1)',
+        implementation: 'Zod schemas are the single source of truth: converted to JSON Schema for MCP protocol and used for runtime input validation. Properties include .describe() for field documentation. Three-layer architecture: CLI layer (argument parsing, transport selection) → MCP layer (protocol handling, tool/resource registration) → AEM layer (domain managers, auth, HTTP). TypeScript throughout with esbuild for production builds.',
+        links: [
+          { label: 'mcp.tools.ts', url: `${AEM}/blob/main/src/mcp/mcp.tools.ts` },
+        ],
       },
       {
         examDomain: 'D5: Context Management',
-        examConcept: 'Consistent Response Shape',
-        implementation: 'Success: {success: true, operation, timestamp, data}. Error: {success: false, operation, timestamp, error: {code, message, recoverable}}. Structured tool responses that enable the agent to reason about success/failure.',
+        examConcept: 'Token-Aware Response Filtering (Task 5.1)',
+        implementation: 'Verbosity parameter (summary/standard/full) on content-reading tools controls response size — reduces token consumption for agent context windows. Response filtering via filterProperties/filterNodeTree strips JCR internals and truncates long text. MCP resources provide upfront catalog data without consuming tool-call tokens. Consistent response shape: Success {success, operation, timestamp, data}, Error {success, operation, timestamp, error: {code, message, recoverable}}.',
+        links: [
+          { label: 'aem.filter.ts', url: `${AEM}/blob/main/src/aem/aem.filter.ts` },
+        ],
       },
       {
         examDomain: 'Comparison',
         examConcept: 'AEM MCP vs MoltBook MCP',
-        implementation: 'AEM MCP: 46 tools, stdio+HTTP, Basic+OAuth S2S auth, multi-instance, 17 typed error codes, built-in exponential backoff, Zod schemas, no HTTPS. MoltBook MCP: 41 tools, stdio+HTTP (auto-detect), API key+JWT auth, per-session API keys via AsyncLocalStorage, JSON-RPC error codes, client-side retry, JSON Schema objects, optional TLS/HTTPS. Both demonstrate MCP tool design, transport selection, error handling, and credential management with different architectural trade-offs.',
+        implementation: 'AEM MCP: 51 tools + 4 resources, stdio+HTTP, Basic+OAuth S2S auth, multi-instance, 17 typed error codes with suggestions/alternatives, built-in exponential backoff, Zod schemas, tool annotations, verbosity levels. MoltBook MCP: 41 tools, stdio+HTTP (auto-detect), API key+JWT auth, per-session API keys via AsyncLocalStorage, JSON-RPC error codes, client-side retry, JSON Schema objects, optional TLS/HTTPS. Both demonstrate MCP tool design, transport selection, error handling, and credential management with different architectural trade-offs.',
       },
       {
         examDomain: 'Architecture Patterns',
         examConcept: 'AEM MCP Architecture Layers',
-        implementation: 'Client (IDE/Agent) -> Transport (Stdio or HTTP) -> MCP Server -> InstanceRegistry (multi-instance) -> MCPRequestHandler -> Zod validation -> AEMConnector -> safeExecute() with retry -> AEMFetch -> Auth (Basic or OAuth S2S) -> AEM Instance. MoltBook transport auto-detection: if (process.stdin.isTTY === false && !opts.noStdio) startStdioServer() else startServer(). Exam parallel: MCP server transport selection — stdio for IDE/agent integration, HTTP for persistent shared servers.',
+        implementation: 'Client (IDE/Agent) → Transport (Stdio or HTTP) → MCP Server (mcp.server.ts: Initialize/ListTools/CallTool/ListResources/ReadResource handlers) → InstanceRegistry (multi-instance) → MCPRequestHandler (mcp.aem-handler.ts: Zod validation + tool dispatch) → Domain Managers (AEMConnector, ContentFragmentManager, ExperienceFragmentManager) → safeExecute() with retry → AEMFetch (auth-aware HTTP client) → Auth (Basic or OAuth S2S via Adobe IMS) → AEM Instance.',
       },
     ],
   },
@@ -187,12 +227,12 @@ const myProjects = [
     name: 'KI-Bundestag',
     domains: ['d1', 'd4', 'd5'],
     repo: 'https://github.com/easingthemes/ki-bundestag',
-    description: 'A German parliament political simulation with 13+ Claude API call sites, multi-model strategy, structured JSON output, token-budgeted context, and a full agentic daily loop.',
+    description: 'A live German parliament simulation (v1.7.5) with 6 autonomous AI party agents, Anthropic Batch API for 50% cost savings, 19-step daily loop, token-budgeted context with priority tiers, and a Turborepo monorepo (engine + API + web + types).',
     sections: [
       {
         examDomain: 'D1: Agentic Architecture',
         examConcept: 'Agentic Loop Implementation (Task 1.1)',
-        implementation: 'Daily simulation loop: while(running) { await runDay(); checkProviderLimits(); sleep(timingPreset); }. Single day execution has 10 stages: bill pipeline advancement, party agent calls (6 parallel, one per party), vote tallying (seat-weighted with human override), economic updates, opinion updates, media generation (Haiku -> 3 articles), crisis management, elections, coalition negotiations (3 rounds, Sonnet synthesis), notifications + event queue.',
+        implementation: 'Daily simulation loop: while(running) { await runDay(); checkProviderLimits(); sleep(timingPreset); }. Single day execution has 19 stages: bill pipeline advancement, party agent calls (6 parallel via Batch API, one per party), vote tallying (seat-weighted with human override), economic drift, opinion updates, media generation (3 articles), crisis management, elections, coalition negotiations (multi-round with Sonnet synthesis and algorithmic fallback), referendums, polls, citizen participation (questions, proposals, MdB applications), notifications + event queue. Fairness checks stop simulation when AI failures create unfair outcomes (e.g., 5 Anthropic parties fail but xAI succeeds).',
         links: [
           { label: 'loop.ts', url: `${KI}/blob/main/packages/engine/src/simulation/loop.ts` },
           { label: 'party-agent.ts', url: `${KI}/blob/main/packages/engine/src/agent/party-agent.ts` },
@@ -200,16 +240,25 @@ const myProjects = [
       },
       {
         examDomain: 'D1: Agentic Architecture',
-        examConcept: 'Multi-Model Strategy (Task 1.2, 2.3)',
-        implementation: 'Haiku for daily operations (fast, cheap): party agent, committee, media, interpellations, proposals, polls. Sonnet for high-reasoning synthesis: coalition agreement synthesis. Grok-3-mini as alternative provider (AfD party). Cost optimization: 13+ Haiku calls/day + 1 Sonnet call/election.',
+        examConcept: 'Multi-Agent Orchestration (Task 1.2)',
+        implementation: '6 autonomous party agents with distinct ideologies and personality profiles, each driven by its own model configuration. Agents propose legislation, debate bills, form coalitions, hold elections, and respond to national crises without human intervention. Multi-provider routing: Anthropic (Haiku 4.5 + Sonnet 4.5) and xAI (Grok 3 Mini) via Vercel AI SDK v6.',
         links: [
+          { label: 'party-agent.ts', url: `${KI}/blob/main/packages/engine/src/agent/party-agent.ts` },
           { label: 'model-config.ts', url: `${KI}/blob/main/packages/engine/src/agent/model-config.ts` },
         ],
       },
       {
         examDomain: 'D1: Agentic Architecture',
+        examConcept: 'Batch API Cost Optimization (Task 1.2)',
+        implementation: 'All Anthropic calls use the Message Batches API for 50% cost reduction. Calls grouped into 4-6 batch phases per day. Batch client handles variable latency (2-4 poll cycles at normal load, 10-16 at high load, observed up to 17 min for MdB seat batches). Partial batch failure detection prevents silent data loss. Semantic retry: when actions parse as valid JSON but fail semantic validation, the system re-prompts the LLM once with structured error feedback before falling back.',
+        links: [
+          { label: 'batch-client.ts', url: `${KI}/blob/main/packages/engine/src/agent/batch-client.ts` },
+        ],
+      },
+      {
+        examDomain: 'D1: Agentic Architecture',
         examConcept: 'Provider Circuit Breaker (Task 1.5)',
-        implementation: 'Hard limits: on "usage limits reached" error, store resetAt timestamp, block ALL calls to that provider until reset, throw AIProviderLimitError. Transient errors (429, network): retry with exponential backoff [2s, 5s], max 2 retries (3 total attempts). Provider fallback: if allProvidersLimited(), pause simulation with user message (graceful degradation, not crash).',
+        implementation: 'Hard limits: on "usage limits reached" error, store resetAt timestamp, block ALL calls to that provider until reset, throw AIProviderLimitError. Transient errors (429, network): retry with exponential backoff [2s, 5s], max 2 retries (3 total attempts). Provider fallback: if allProvidersLimited(), pause simulation with user message (graceful degradation, not crash). Per-provider rate limit tracking with TTL-based auto-reset; provider auth failure detection.',
         links: [
           { label: 'client.ts', url: `${KI}/blob/main/packages/engine/src/agent/client.ts` },
         ],
@@ -217,7 +266,7 @@ const myProjects = [
       {
         examDomain: 'D4: Prompt Engineering',
         examConcept: 'Structured Output via JSON (Task 4.3)',
-        implementation: 'System prompt enforces full JSON schema with all 11 action types. Explicit constraint numbers (budget +/-1B, unemployment +/-0.1%). Warnings about common LLM quirks (trailing commas, +0.5 instead of 0.5).',
+        implementation: 'System prompt enforces full JSON schema with all 11 action types. Explicit constraint numbers (budget +/-1B, unemployment +/-0.1%). Warnings about common LLM quirks (trailing commas, +0.5 instead of 0.5). Real-world lesson: Anthropic\'s structured output hit schema complexity limits (27 optional params, grammar compilation timeouts) — fell back to prompt-based JSON generation with multi-stage sanitization pipeline.',
         links: [
           { label: 'prompt.ts', url: `${KI}/blob/main/packages/engine/src/agent/prompt.ts` },
         ],
@@ -225,7 +274,7 @@ const myProjects = [
       {
         examDomain: 'D4: Prompt Engineering',
         examConcept: 'JSON Sanitization Pipeline (Task 4.4)',
-        implementation: 'Multi-stage sanitization: Raw LLM output -> stripCodeFences() -> JSON.parse() -> [on failure]: stripLeadingPlusInNumbers() (+0.5 -> 0.5) -> stripTrailingCommas() ({a:1,} -> {a:1}) -> JSON.parse() retry -> validateActions() -> [on failure]: abstain on all (graceful degradation). Handles exact LLM quirks: format errors that CAN be fixed by retry vs missing information that CANNOT.',
+        implementation: 'parseAIJson() pipeline: Raw LLM output → stripCodeFences() → JSON.parse() → [on failure]: stripLeadingPlusInNumbers() (+0.5 → 0.5) → stripTrailingCommas() ({a:1,} → {a:1}) → JSON.parse() retry → validateActions() → [on failure]: semantic retry with structured error feedback → [final failure]: abstain on all (graceful degradation). Per-module fallback policies define what happens on failure (e.g., party agent fails → abstain all votes; negotiation synthesis fails → algorithmic findBestCoalition()).',
         links: [
           { label: 'action-parser.ts', url: `${KI}/blob/main/packages/engine/src/agent/action-parser.ts` },
           { label: 'ai-json.ts', url: `${KI}/blob/main/packages/engine/src/agent/ai-json.ts` },
@@ -233,8 +282,8 @@ const myProjects = [
       },
       {
         examDomain: 'D4: Prompt Engineering',
-        examConcept: 'Few-Shot Pattern via System Prompt (Task 4.2)',
-        implementation: '20 numbered rules with explicit behavior examples. Impact constraint values as concrete numbers. Action type schemas with example values. Coalition dynamics guidance with scenario examples.',
+        examConcept: 'Hand-Crafted Persona Prompts (Task 4.2)',
+        implementation: '20 numbered rules with explicit behavior examples. Each party gets a 200-300 token personality profile with voice, strategy, red lines, and relationship dynamics. Impact constraint values as concrete numbers. Action type schemas with example values. JSON hardening rules in system prompts: explicit instructions against code fences, leading +, trailing commas.',
         links: [
           { label: 'prompt.ts', url: `${KI}/blob/main/packages/engine/src/agent/prompt.ts` },
           { label: 'party-profiles.ts', url: `${KI}/blob/main/packages/engine/src/agent/party-profiles.ts` },
@@ -242,8 +291,8 @@ const myProjects = [
       },
       {
         examDomain: 'D4: Prompt Engineering',
-        examConcept: 'Token-Budgeted Context (Task 4.5, 5.1)',
-        implementation: 'Dynamic context slicing: Priority 1 (always included): current day, party info, coalition/opposition rosters, national economic state, bills by reading stage, active crises + government info. Priority 2+3 (greedy-loaded within ~3000 token budget): events -> media -> proposals -> motions -> interpellations -> challenges. Token estimation: ~4 chars per token.',
+        examConcept: 'Token-Budgeted Context Assembly (Task 4.5, 5.1)',
+        implementation: 'Priority-based context assembly with three depth presets: low (~$0.020/day), normal (~$0.028/day), high (~$0.040/day). P1 (always): current day, party info, coalition/opposition, economy, bills, crises, government. P1.25-P1.5: era summaries (compressed 60-day political history), daily briefing. P2 (if budget allows): events, media, proposals. P3 (dropped if over budget): motions, interpellations, challenges. Token estimation: ~4 chars/token. Explicit per-day cost tracking.',
         links: [
           { label: 'context-depth.ts', url: `${KI}/blob/main/packages/engine/src/agent/context-depth.ts` },
           { label: 'briefing.ts', url: `${KI}/blob/main/packages/engine/src/agent/briefing.ts` },
@@ -259,27 +308,23 @@ const myProjects = [
       },
       {
         examDomain: 'D5: Context Management',
-        examConcept: 'Multi-Provider Resilience (Task 5.5)',
-        implementation: 'Anthropic + xAI providers. Per-provider rate limit tracking with TTL. allProvidersLimited() check before each day. Graceful pause (not crash) when all providers limited.',
-        links: [
-          { label: 'client.ts', url: `${KI}/blob/main/packages/engine/src/agent/client.ts` },
-          { label: 'batch-client.ts', url: `${KI}/blob/main/packages/engine/src/agent/batch-client.ts` },
-        ],
+        examConcept: 'Era Summaries — Context Compression (Task 5.1)',
+        implementation: 'Every 60 simulation days, raw event data is compressed into era summaries with structured case facts. These replace verbose event logs in agent context — a form of lossy context compression that preserves decision-relevant information while dramatically reducing token count. 30-day event windows compressed into daily narrative briefings for agent consumption.',
       },
       {
         examDomain: 'D5: Context Management',
         examConcept: 'Human-in-the-Loop (Task 5.4)',
-        implementation: 'MdB (Member of Bundestag) system: users join parties, apply for Bundestag seats. AI reviews applications (max 3/party/day). Humans can override AI votes on individual bills. Discipline system: AI tracks voting against party line -> warn -> restrict -> whip -> expel.',
+        implementation: 'MdB (Member of Bundestag) system: users join parties, apply for Bundestag seats. AI reviews applications (max 3/party/day). Humans can override AI votes on individual bills. Citizen participation: questions (with bot moderation, dedup/spam filtering), proposals. Discipline system: AI tracks voting against party line → warn → restrict → whip → expel.',
       },
       {
         examDomain: 'D5: Context Management',
         examConcept: 'Structured Logging / Observability',
-        implementation: 'logAICall() pattern: [AI] agent:spd | anthropic/claude-haiku-4-5 | 847ms | OK. Every call logged with: task, provider/model, latency, parse/validation status. Observability through the coordinator — all agent communication visible for debugging.',
+        implementation: 'logAICall() pattern: [AI] agent:spd | anthropic/claude-haiku-4-5 | 847ms | OK. Every call logged with: task, provider/model, latency, parse/validation status, input/output tokens. AI calls table in SQLite for historical analysis. Observability through the coordinator — all agent communication visible for debugging.',
       },
       {
         examDomain: 'Architecture Patterns',
         examConcept: 'Key Patterns Summary',
-        implementation: 'Agentic loop lifecycle: while(running) { runDay(); checkLimits(); sleep(); }. stop_reason handling: provider limit detection -> pause vs continue. Multi-model strategy: Haiku (daily) + Sonnet (synthesis) + Grok (alternative). Structured output: JSON schema in system prompt + multi-stage sanitization. Token budgeting: priority-based context slicing (~3000 token budget). Retry with feedback: exponential backoff for transient, fail-fast for permanent. Human-in-the-loop: MdB vote overrides + AI discipline tracking. Graceful degradation: parse failure -> abstain (not crash). Observability: structured logging per AI call.',
+        implementation: 'Turborepo monorepo: 4 packages (types ← engine ← api, web standalone). Agentic loop: 19-step runDay() with fairness checks. Batch API: 50% cost savings via Anthropic Message Batches, grouped into 4-6 phases/day. Multi-model: Haiku (daily) + Sonnet (synthesis) + Grok (alternative provider). Structured output: JSON schema in system prompt + parseAIJson() sanitization + semantic retry + per-module fallback. Token budgeting: priority-based context (P1-P3) with three cost presets. Era compression: 60-day summaries replace raw events. Circuit breaker: per-provider limits with TTL auto-reset. Human-in-the-loop: MdB overrides + citizen participation + AI discipline. Graceful degradation: parse failure → abstain (not crash). Built with Claude Code (153 PRs, v1.0→v1.7.5 in 5 days).',
       },
     ],
   },
