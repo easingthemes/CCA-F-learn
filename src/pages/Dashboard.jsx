@@ -320,7 +320,16 @@ function DomainReadinessGrid({ getStatus }) {
   );
 }
 
-function ScenarioGrid() {
+function scenarioCompletion(scenario, getStatus) {
+  const total = scenario.checklist ? scenario.checklist.length : 0;
+  if (total === 0) return { pct: 0, total, checked: 0 };
+  const checked = scenario.checklist.filter((_, i) =>
+    getStatus(`scenario:${scenario.id}:${i}`, false)
+  ).length;
+  return { pct: Math.round((checked / total) * 100), total, checked };
+}
+
+function ScenarioGrid({ getStatus }) {
   return (
     <>
       <SectionHeading
@@ -332,38 +341,45 @@ function ScenarioGrid() {
       />
       <Section sx={{ pt: 4, pb: 6 }}>
         <Grid container spacing={2}>
-          {scenarios.map((s) => (
-            <Grid key={s.id} size={{ xs: 12, sm: 6, md: 4 }}>
-              <Card sx={{ height: '100%', '&:hover': { boxShadow: 6 }, transition: 'box-shadow 0.2s' }}>
-                <CardActionArea component={Link} to={`/scenarios/${s.id}`} sx={{ height: '100%', alignItems: 'flex-start' }}>
-                  <CardContent sx={{ p: 2.5, '&:last-child': { pb: 2.5 } }}>
-                    <Typography variant="h3" sx={{ fontWeight: 700, mb: 1.5, fontSize: '0.95rem' }}>
-                      {s.name}
-                    </Typography>
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                      {s.domains.map((dId) => {
-                        const domain = getDomain(dId);
-                        return domain ? (
-                          <Chip
-                            key={dId}
-                            label={domain.name.split(' ')[0]}
-                            size="small"
-                            sx={{
-                              bgcolor: `${domain.color}22`,
-                              color: domain.color,
-                              border: `1px solid ${domain.color}44`,
-                              fontWeight: 600,
-                              fontSize: '0.65rem',
-                            }}
-                          />
-                        ) : null;
-                      })}
-                    </Box>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-            </Grid>
-          ))}
+          {scenarios.map((s) => {
+            const { pct, total, checked } = scenarioCompletion(s, getStatus);
+            return (
+              <Grid key={s.id} size={{ xs: 12, sm: 6, md: 4 }}>
+                <Card sx={{ height: '100%', '&:hover': { boxShadow: 6 }, transition: 'box-shadow 0.2s' }}>
+                  <CardActionArea component={Link} to={`/scenarios/${s.id}`} sx={{ height: '100%', alignItems: 'flex-start' }}>
+                    <CardContent sx={{ p: 2.5, '&:last-child': { pb: 2.5 } }}>
+                      <Typography variant="h3" sx={{ fontWeight: 700, mb: 1, fontSize: '0.95rem' }}>
+                        {s.name}
+                      </Typography>
+                      <ProgressBar value={pct} sx={{ mb: 0.75 }} />
+                      <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.7rem', display: 'block', mb: 1.5 }}>
+                        {checked}/{total} checklist items
+                      </Typography>
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                        {s.domains.map((dId) => {
+                          const domain = getDomain(dId);
+                          return domain ? (
+                            <Chip
+                              key={dId}
+                              label={domain.name.split(' ')[0]}
+                              size="small"
+                              sx={{
+                                bgcolor: `${domain.color}22`,
+                                color: domain.color,
+                                border: `1px solid ${domain.color}44`,
+                                fontWeight: 600,
+                                fontSize: '0.65rem',
+                              }}
+                            />
+                          ) : null;
+                        })}
+                      </Box>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </Grid>
+            );
+          })}
         </Grid>
       </Section>
     </>
@@ -480,7 +496,7 @@ export default function Dashboard() {
       </Section>
 
       {/* 4 + 5. Scenarios */}
-      <ScenarioGrid />
+      <ScenarioGrid getStatus={getStatus} />
 
       {/* 6. Quick links */}
       <SectionHeading title="Quick Links" align="left" bg="default" />
