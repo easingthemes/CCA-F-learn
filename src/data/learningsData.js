@@ -2805,7 +2805,7 @@ The exam's concept of **configuration externalization** — skills work across a
     weight: '20%',
     content: `# Domain 3: Skills & Hooks (20%)
 
-Covers skill frontmatter design, hook system events, custom slash commands, and workflow enforcement. The DX Plugin System has **77+ skills** and **4 hook types** with production-proven patterns.
+Covers skill frontmatter design, hook system events, custom slash commands, and workflow enforcement. The DX Plugin System has **76 skills** and **8 hooks across 4 types** with production-proven patterns.
 
 ---
 
@@ -2983,7 +2983,7 @@ Hooks communicate back to Claude Code via JSON on stdout.
 
 ---
 
-## 6. The 77+ Skills Organized by Workflow
+## 6. The 76 Skills Organized by Workflow
 
 ### Exam concept
 Skills should be composable and follow naming conventions.
@@ -3018,7 +3018,7 @@ Skills should be composable and follow naming conventions.
 
 | Concept | Exam Weight | Our Experience |
 |---|---|---|
-| Skill frontmatter fields | High | 77+ skills with diverse frontmatter patterns |
+| Skill frontmatter fields | High | 76 skills with diverse frontmatter patterns |
 | Hook types & events | High | 4 types: SessionStart, PreToolUse, PostToolUse, Stop |
 | Hook matchers | High | Glob-style tool targeting |
 | Context forking | Medium | fork for heavy work, inline for quick tasks |
