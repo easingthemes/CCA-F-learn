@@ -52,10 +52,10 @@ export const studyPlan = {
         {
           name: 'Review project-to-domain mappings',
           items: [
-            { name: 'DX Plugins (77+ skills, hooks, rules) — D1, D2, D3', status: 'completed', link: '/my-projects/dx-plugins' },
-            { name: 'AEM MCP Server (46 tools, structured errors) — D2, D5', status: 'completed', link: '/my-projects/aem-mcp' },
+            { name: 'DX Plugins (76 skills, 4 plugins, 10 AI platforms) — D1, D2, D3', status: 'completed', link: '/my-projects/dx-plugins' },
+            { name: 'AEM MCP Server (51 tools, 4 MCP resources) — D2, D5', status: 'completed', link: '/my-projects/aem-mcp' },
             { name: 'MoltBook MCP Server (41 tools, HTTP+stdio) — D2, D4', status: 'completed', link: '/my-projects/aem-mcp' },
-            { name: 'KI Project (13+ AI calls, agentic loops) — D1, D4, D5', status: 'completed', link: '/my-projects/ki-bundestag' },
+            { name: 'KI Project (6 AI agents, Batch API, 19-step loop) — D1, D4, D5', status: 'completed', link: '/my-projects/ki-bundestag' },
           ],
         },
       ],
@@ -388,7 +388,7 @@ export const domains = [
         ],
         antiPatterns: [],
         myProjectRefs: [
-          'DX Plugins: 4 hook types — SessionStart, PreToolUse, PostToolUse, Stop',
+          'DX Plugins: 8 hooks across 4 types — SessionStart, PreToolUse, PostToolUse, Stop — with three profiles (minimal/standard/strict)',
           'DX Plugins: PostToolUse validates plugin.json edits, prevents corruption',
           'KI-Bundestag: provider circuit breaker with TTL (hooks-equivalent for rate limits)',
         ],
@@ -481,8 +481,8 @@ export const domains = [
           { level: 'With intelligent fallbacks', example: 'enhancedPageSearch: "Intelligent page search with comprehensive fallback strategies and cross-section search"' },
         ],
         myProjectRefs: [
-          'AEM MCP: 46 tools split into 8 categories (Content, Sites, Pages, Components, Assets, Search, Templates, Workflows, Fragments)',
-          'AEM MCP: tool descriptions include intelligent behavior explanation and common examples',
+          'AEM MCP: 51 tools across 10 categories with tool annotations (group, readOnly, complexity) for intelligent agent selection',
+          'AEM MCP: 4 MCP resources for upfront catalog discovery (components, sites, templates, workflow models) — resources vs tools distinction',
         ],
         quizRefs: [
           { section: 's2', question: 1, label: 'S2:Q1 — get_customer vs lookup_order tool selection' },
@@ -513,7 +513,7 @@ export const domains = [
           'Generic "Operation failed" error responses',
         ],
         myProjectRefs: [
-          'AEM MCP: 17 typed error codes (CONNECTION_FAILED, TIMEOUT, RATE_LIMITED, INVALID_PATH, etc.)',
+          'AEM MCP: 17 typed error codes with suggestion + alternatives fields for self-healing agent workflows',
           'AEM MCP: recoverable + retryAfter fields, safeExecute() with exponential backoff',
           'AEM MCP: isError: true in MCP response (correct pattern), never throws to crash agent',
           'MoltBook MCP: layered error handling (MCP level, tool level, API level)',
@@ -635,7 +635,7 @@ export const domains = [
         ],
         antiPatterns: [],
         myProjectRefs: [
-          'DX Plugins: Root CLAUDE.md (8720 bytes) + Plugin CLAUDE.md (9000+ bytes) + agent memory files',
+          'DX Plugins: Root CLAUDE.md + Plugin CLAUDE.md + agent memory (.claude/agent-memory/*/MEMORY.md)',
         ],
       },
       {
@@ -658,8 +658,8 @@ export const domains = [
         ],
         antiPatterns: [],
         myProjectRefs: [
-          'DX Plugins: 77+ skills with YAML frontmatter (context: fork, allowed-tools, argument-hint)',
-          'DX Plugins: three-layer override system (rules > config.yaml > plugin defaults)',
+          'DX Plugins: 76 skills with YAML frontmatter (context: fork, allowed-tools, argument-hint) running across 10 AI platforms',
+          'DX Plugins: three-layer override system (rules > config.yaml > plugin defaults), DOT digraph flow control for branching skills',
         ],
         quizRefs: [
           { section: 's3', question: 8, label: 'S3:Q8 — Personal vs project-scoped custom skills' },
@@ -761,7 +761,7 @@ export const domains = [
         ],
         antiPatterns: [],
         myProjectRefs: [
-          'DX Plugins: dx-automation plugin runs Claude Code agents as ADO pipelines triggered by AWS Lambda webhooks',
+          'DX Plugins: dx-automation plugin (11 skills) runs Claude Code agents as ADO pipelines — fully autonomous 24/7 PR review, bug fixing, QA',
         ],
         quizRefs: [
           { section: 's1', question: 6, label: 'S1:Q6 — --output-format json + --json-schema for CI' },
@@ -862,7 +862,7 @@ export const domains = [
         ],
         myProjectRefs: [
           'KI-Bundestag: full JSON schema with all 11 action types in system prompt',
-          'AEM MCP: Zod schemas converted to JSON Schema for MCP tool definitions',
+          'AEM MCP: Zod schemas as single source of truth — converted to JSON Schema for MCP protocol, used for runtime validation',
           'MoltBook MCP: required vs optional fields in tool schemas',
         ],
       },
@@ -1080,7 +1080,7 @@ export const domains = [
         ],
         antiPatterns: [],
         myProjectRefs: [
-          'AEM MCP: structured error responses with recoverable/retryAfter, consistent success/error response shape',
+          'AEM MCP: verbosity parameter (summary/standard/full) reduces token consumption, consistent response shape with structured errors',
           'KI-Bundestag: provider circuit breaker (per-provider rate limit tracking with TTL, graceful pause not crash)',
         ],
       },
