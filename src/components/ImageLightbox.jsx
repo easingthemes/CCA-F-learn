@@ -5,11 +5,15 @@ import Modal from '@mui/material/Modal';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
+const resolveAsset = (path) =>
+  path && path.startsWith('/') ? import.meta.env.BASE_URL + path.slice(1) : path;
+
 /**
  * ImageLightbox — flat image with optional label, click to fullscreen.
  */
 export default function ImageLightbox({ src, alt, label, sx = {} }) {
   const [open, setOpen] = useState(false);
+  const resolvedSrc = resolveAsset(src);
 
   return (
     <>
@@ -27,7 +31,7 @@ export default function ImageLightbox({ src, alt, label, sx = {} }) {
         )}
         <Box
           component="img"
-          src={src}
+          src={resolvedSrc}
           alt={alt || label || ''}
           sx={{
             width: '100%',
@@ -61,7 +65,7 @@ export default function ImageLightbox({ src, alt, label, sx = {} }) {
           </IconButton>
           <Box
             component="img"
-            src={src}
+            src={resolvedSrc}
             alt={alt || label || ''}
             sx={{ maxWidth: '90vw', maxHeight: '90vh' }}
           />
