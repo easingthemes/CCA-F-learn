@@ -81,6 +81,13 @@ const components = {
             lineHeight: 1.6,
             my: 2,
             fontFamily: '"Fira Code", "JetBrains Mono", monospace',
+            '& code': {
+              color: 'inherit',
+              background: 'none',
+              p: 0,
+              fontSize: 'inherit',
+              fontFamily: 'inherit',
+            },
           }}
         >
           <code>{children}</code>
