@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useContext, createContext, createElement } from 'react';
 
 const STORAGE_KEY = 'ccaf-progress';
 
@@ -15,7 +15,9 @@ function saveProgress(data) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
-export function useProgress() {
+const ProgressContext = createContext(null);
+
+export function ProgressProvider({ children }) {
   const [progress, setProgress] = useState(loadProgress);
 
   const setStatus = useCallback((key, value) => {
@@ -46,5 +48,17 @@ export function useProgress() {
     setProgress({});
   }, []);
 
-  return { progress, getStatus, setStatus, toggleChecked, resetAll };
+  return createElement(
+    ProgressContext.Provider,
+    { value: { progress, getStatus, setStatus, toggleChecked, resetAll } },
+    children
+  );
+}
+
+export function useProgress() {
+  const ctx = useContext(ProgressContext);
+  if (!ctx) {
+    throw new Error('useProgress must be used within a ProgressProvider');
+  }
+  return ctx;
 }
