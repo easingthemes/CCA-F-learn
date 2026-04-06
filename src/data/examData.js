@@ -340,7 +340,7 @@ export const domains = [
           'Daisy-chain full conversation logs between subagents',
         ],
         myProjectRefs: [
-          'DX Plugins: agents require full prefixed names (dx-dev-experience:dx-code-reviewer), short names fail silently',
+          'DX Plugins: agents require full prefixed names (dx-core:dx-code-reviewer), short names fail silently',
           'DX Plugins: executor agent has restricted tool access (no MCP, no Task spawning)',
         ],
       },
@@ -574,7 +574,7 @@ export const domains = [
         myProjectRefs: [
           'DX Plugins: multi-level MCP scoping (project .mcp.json + plugin .mcp.json)',
           'DX Plugins: ${AEM_INSTANCES} env var expansion, secrets in settings.local.json (gitignored)',
-          'DX Plugins: full tool prefix naming (mcp__plugin_dx-dev-experience_figma__get_screenshot)',
+          'DX Plugins: full tool prefix naming (mcp__plugin_dx-core_figma__get_screenshot)',
           'MoltBook MCP: per-session API keys via AsyncLocalStorage, API key resolution chain (header -> env var)',
         ],
         quizRefs: [

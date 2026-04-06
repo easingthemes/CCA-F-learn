@@ -27,7 +27,7 @@ const myProjects = [
       {
         examDomain: 'D1: Agentic Architecture',
         examConcept: 'Subagent Spawning & Context (Task 1.3)',
-        implementation: 'Agents require full prefixed names: dx-dev-experience:dx-code-reviewer. Short names fail silently — matches exam concept that subagent context must be explicit. Each agent .md has YAML frontmatter with model, tools, description. Executor agent has restricted tool access (no MCP, no Task spawning).',
+        implementation: 'Agents require full prefixed names: dx-core:dx-code-reviewer. Short names fail silently — matches exam concept that subagent context must be explicit. Each agent .md has YAML frontmatter with model, tools, description. Executor agent has restricted tool access (no MCP, no Task spawning).',
         links: [
           { label: 'dx-core agents/', url: `${DX}/tree/main/plugins/dx-core/agents` },
           { label: 'dx-aem agents/', url: `${DX}/tree/main/plugins/dx-aem/agents` },
@@ -58,7 +58,7 @@ const myProjects = [
       {
         examDomain: 'D2: Tool Design & MCP',
         examConcept: 'MCP Server Integration (Task 2.4)',
-        implementation: 'Multi-level MCP scoping: project .mcp.json (context7, ado) + plugin dx-dev .mcp.json (axe-mcp-server, figma) + plugin dx-aem .mcp.json (AEM, chrome-devtools). ${AEM_INSTANCES} env var expansion with secrets in settings.local.json (gitignored). Full tool prefix naming: mcp__plugin_dx-dev-experience_figma__get_screenshot. 6 MCP server integrations: ADO, Atlassian, Figma, axe (accessibility), AEM (HTTP), Chrome DevTools.',
+        implementation: 'Multi-level MCP scoping: project .mcp.json (context7, ado) + plugin dx-dev .mcp.json (axe-mcp-server, figma) + plugin dx-aem .mcp.json (AEM, chrome-devtools). ${AEM_INSTANCES} env var expansion with secrets in settings.local.json (gitignored). Full tool prefix naming: mcp__plugin_dx-core_figma__get_screenshot. 6 MCP server integrations: ADO, Atlassian, Figma, axe (accessibility), AEM (HTTP), Chrome DevTools.',
         links: [
           { label: '.mcp.json', url: `${DX}/blob/main/.mcp.json` },
         ],
@@ -127,7 +127,7 @@ const myProjects = [
       {
         examDomain: 'Architecture Patterns',
         examConcept: 'Key Architectural Decisions',
-        implementation: 'Config-driven design: .ai/config.yaml read at runtime, never hardcoded (avoids stale documentation). Spec convention: .ai/specs/<id>-<slug>/ with predictable filenames (structured data for context passing). Override layers: 3-layer priority — rules > config > defaults (CLAUDE.md hierarchy and scoping). Full prefix naming: dx-dev-experience:dx-code-reviewer (explicit subagent context, no auto-inherit). Plugin edit validation: PostToolUse hook prevents plugin.json corruption (hooks for deterministic compliance). Anti-rationalization: Stop hook blocks exit if plan steps abandoned (enforcement patterns vs prompt-based guidance). Four-plugin architecture: dx-core (49 skills, platform-agnostic), dx-aem (12 skills, AEM-specific), dx-automation (11 skills, CI/CD agents), dx-hub (4 skills, multi-repo orchestration).',
+        implementation: 'Config-driven design: .ai/config.yaml read at runtime, never hardcoded (avoids stale documentation). Spec convention: .ai/specs/<id>-<slug>/ with predictable filenames (structured data for context passing). Override layers: 3-layer priority — rules > config > defaults (CLAUDE.md hierarchy and scoping). Full prefix naming: dx-core:dx-code-reviewer (explicit subagent context, no auto-inherit). Plugin edit validation: PostToolUse hook prevents plugin.json corruption (hooks for deterministic compliance). Anti-rationalization: Stop hook blocks exit if plan steps abandoned (enforcement patterns vs prompt-based guidance). Four-plugin architecture: dx-core (49 skills, platform-agnostic), dx-aem (12 skills, AEM-specific), dx-automation (11 skills, CI/CD agents), dx-hub (4 skills, multi-repo orchestration).',
       },
     ],
   },
