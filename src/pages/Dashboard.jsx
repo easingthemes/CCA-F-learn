@@ -57,17 +57,24 @@ function domainCompletion(domain, getStatus) {
   return { pct: Math.round((reviewed / total) * 100), total, reviewed };
 }
 
-function computePhaseStatus(phase, getStatus) {
+function computePhaseCompletion(phase, getStatus) {
   const allItemsDone = phase.steps.flatMap((step, si) =>
     step.items.map((item, i) => {
       const key = `plan:${phase.id}:${si}:${i}`;
       return getStatus(key, false) || isLinkedContentDone(item, getStatus);
     })
   );
+  const total = allItemsDone.length;
   const doneCount = allItemsDone.filter(Boolean).length;
-  if (doneCount === allItemsDone.length) return 'completed';
-  if (doneCount > 0) return 'in_progress';
-  return 'pending';
+  const pct = total > 0 ? Math.round((doneCount / total) * 100) : 0;
+  let status = 'pending';
+  if (doneCount === total) status = 'completed';
+  else if (doneCount > 0) status = 'in_progress';
+  return { status, pct, doneCount, total };
+}
+
+function computePhaseStatus(phase, getStatus) {
+  return computePhaseCompletion(phase, getStatus).status;
 }
 
 function phaseSegmentBg(phase) {
@@ -80,15 +87,25 @@ function phaseSegmentBg(phase) {
 
 function PhaseProgressBar({ getStatus }) {
   const phases = studyPlan.phases;
+  const phaseData = phases.map((phase) => computePhaseCompletion(phase, getStatus));
+  const totalItems = phaseData.reduce((sum, p) => sum + p.total, 0);
+  const totalDone = phaseData.reduce((sum, p) => sum + p.doneCount, 0);
+  const overallPct = totalItems > 0 ? Math.round((totalDone / totalItems) * 100) : 0;
+
   return (
     <Box sx={{ bgcolor: 'primary.dark', color: '#fff', py: { xs: 4, md: 5 }, px: { xs: 2, md: 3 } }}>
       <Box sx={{ maxWidth: 'lg', mx: 'auto' }}>
-        <Typography variant="overline" sx={{ color: 'rgba(255,255,255,0.6)', letterSpacing: '0.1em', mb: 2, display: 'block' }}>
-          Study Plan Progress
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', mb: 2 }}>
+          <Typography variant="overline" sx={{ color: 'rgba(255,255,255,0.6)', letterSpacing: '0.1em' }}>
+            Study Plan Progress
+          </Typography>
+          <Typography variant="caption" sx={{ color: '#36C0CF', fontWeight: 700, fontSize: '0.85rem' }}>
+            {overallPct}% ({totalDone}/{totalItems})
+          </Typography>
+        </Box>
         <Box sx={{ display: 'flex', gap: 0.5, mb: 1.5 }}>
-          {phases.map((phase) => {
-            const status = computePhaseStatus(phase, getStatus);
+          {phases.map((phase, idx) => {
+            const { status, pct } = phaseData[idx];
             return (
               <Box
                 key={phase.id}
@@ -96,15 +113,26 @@ function PhaseProgressBar({ getStatus }) {
                   flex: 1,
                   height: 12,
                   borderRadius: 1,
-                  background: phaseSegmentBg({ status }),
+                  bgcolor: 'rgba(255,255,255,0.15)',
+                  overflow: 'hidden',
                 }}
-              />
+              >
+                <Box
+                  sx={{
+                    width: `${pct}%`,
+                    height: '100%',
+                    borderRadius: 1,
+                    background: status === 'completed' ? '#4caf50' : '#36C0CF',
+                    transition: 'width 0.3s ease',
+                  }}
+                />
+              </Box>
             );
           })}
         </Box>
         <Box sx={{ display: 'flex', gap: 0.5 }}>
-          {phases.map((phase) => {
-            const status = computePhaseStatus(phase, getStatus);
+          {phases.map((phase, idx) => {
+            const { status, pct, doneCount, total } = phaseData[idx];
             return (
               <Box key={phase.id} sx={{ flex: 1, minWidth: 0 }}>
                 <Typography
@@ -116,7 +144,7 @@ function PhaseProgressBar({ getStatus }) {
                       : status === 'in_progress'
                       ? '#36C0CF'
                       : 'rgba(255,255,255,0.45)',
-                    fontWeight: status === 'in_progress' ? 700 : 400,
+                    fontWeight: status !== 'pending' ? 700 : 400,
                     fontSize: '0.68rem',
                     lineHeight: 1.3,
                     whiteSpace: 'nowrap',
@@ -132,10 +160,9 @@ function PhaseProgressBar({ getStatus }) {
                     display: 'block',
                     color: 'rgba(255,255,255,0.35)',
                     fontSize: '0.6rem',
-                    textTransform: 'capitalize',
                   }}
                 >
-                  {status.replace('_', ' ')}
+                  {doneCount}/{total} ({pct}%)
                 </Typography>
               </Box>
             );
