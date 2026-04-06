@@ -64,6 +64,12 @@ const theme = createTheme({
           fontSize: '0.85em',
           color: '#2d308d',
         },
+        'pre code': {
+          color: 'inherit',
+          background: 'none',
+          padding: 0,
+          fontSize: 'inherit',
+        },
         '@media print': {
           // Hide nav, footer, side badge
           'header.MuiAppBar-root, [class*="MuiDrawer"], footer, [data-print="hide"]': {
